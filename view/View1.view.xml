@@ -1,0 +1,31 @@
+<mvc:View
+	controllerName="pdfmobile.controller.View1"
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:l="sap.ui.layout"
+	xmlns:u="sap.ui.unified"
+>
+	<Page
+		id="page"
+		title="{i18n>title}"
+	>
+		<content>
+			<l:VerticalLayout>
+				<u:FileUploader
+					id="fileUploaderPhoto"
+					buttonText="Take Photo"
+					icon="sap-icon://add-photo"
+					uploadUrl="upload/"
+					buttonOnly="true"
+					uploadComplete="handleUploadComplete"
+					style="Emphasized"
+					change="onSelecFile"
+					sameFilenameAllowed="true"
+					fileType="pdf,jpg,jpeg,bmp,gif,png"
+				/>
+
+			</l:VerticalLayout>
+		</content>
+	</Page>
+</mvc:View>
