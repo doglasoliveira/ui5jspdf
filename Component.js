@@ -6,7 +6,7 @@ sap.ui.loader.config({
     paths: {
         "thirdparty/canvg": "https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.10/umd.min",
         "thirdparty/jsPDF": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min",
-        "thirdparty/exif-js": "https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"
+        "thirdparty/exif-js": "https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min"
     },
 
     // provide dependency and export metadata for non-UI5 modules
