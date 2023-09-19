@@ -24,8 +24,7 @@ sap.ui.loader.config({
         },
         "thirdparty/exif-js": {
             amd: true,
-            exports: "exif-js",
-            deps: ["thirdparty/exif-js"]
+            exports: "exif-js"
         }
     }
 });
