@@ -1,12 +1,12 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "thirdparty/jsPDF",
-    'thirdparty/exif-js'
+    'exif-js'
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, jsPDF, exif) {
+    function (Controller, jsPDF, EXIF) {
         "use strict";
 
         return Controller.extend("pdfmobile.controller.View1", {
@@ -28,7 +28,6 @@ sap.ui.define([
             },
             fixImageOrientation: (file, callback) => {
                 if (file.type.startsWith('image/')) {
-                    const EXIF = new exif();
                     EXIF.getData(file, function () {
                         const orientation = EXIF.getTag(this, 'Orientation');
                         const img = new Image();
