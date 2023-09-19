@@ -5,7 +5,8 @@ sap.ui.loader.config({
     // load thirparty from cdn
     paths: {
         "thirdparty/canvg": "https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.10/umd.min",
-        "thirdparty/jsPDF": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min"
+        "thirdparty/jsPDF": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min",
+        "thirdparty/exif-js": "https://cdn.jsdelivr.net/npm/exif-js"
     },
 
     // provide dependency and export metadata for non-UI5 modules
@@ -20,15 +21,20 @@ sap.ui.loader.config({
             amd: true,
             exports: "jspdf",
             deps: ["thirdparty/canvg"]
+        },
+        "thirdparty/exif-js": {
+            amd: true,
+            exports: "exif-js",
+            deps: ["thirdparty/exif-js"]
         }
     }
 });
 
 sap.ui.define([
-        "sap/ui/core/UIComponent",
-        "sap/ui/Device",
-        "pdfmobile/model/models"
-    ],
+    "sap/ui/core/UIComponent",
+    "sap/ui/Device",
+    "pdfmobile/model/models"
+],
     function (UIComponent, Device, models) {
         "use strict";
 
