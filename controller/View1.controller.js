@@ -1,7 +1,7 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "thirdparty/jsPDF",
-    "thirdparty/exif-js"
+    "thirdparty/exif"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
