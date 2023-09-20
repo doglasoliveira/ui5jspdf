@@ -5,8 +5,7 @@ sap.ui.loader.config({
     // load thirparty from cdn
     paths: {
         "thirdparty/canvg": "https://cdnjs.cloudflare.com/ajax/libs/canvg/3.0.10/umd.min",
-        "thirdparty/jsPDF": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min",
-        "thirdparty/exif": "https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min"
+        "thirdparty/jsPDF": "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min"
     },
 
     // provide dependency and export metadata for non-UI5 modules
@@ -21,10 +20,6 @@ sap.ui.loader.config({
             amd: true,
             exports: "jspdf",
             deps: ["thirdparty/canvg"]
-        },
-        "thirdparty/exif": {
-            amd: true,
-            exports: "exif"
         }
     }
 });
