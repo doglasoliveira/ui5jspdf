@@ -43,7 +43,7 @@ sap.ui.define([
                         // Converta o canvas para um Blob
                         canvas.toBlob((blob) => {
                             // Crie um novo documento PDF usando jsPDF
-                            const doc = new jsPDF();
+                            const doc = new jsPDF.jsPDF();
                             const pdfWidth = doc.internal.pageSize.getWidth();
                             const pdfHeight = doc.internal.pageSize.getHeight();
 
