@@ -28,7 +28,8 @@ sap.ui.define([
             },
             fixImageOrientation: (file, callback) => {
                 if (file.type.startsWith('image/')) {
-                    EXIF.getData(file, function () {
+                    const oExit = new EXIF();
+                    oExit.getData(file, function () {
                         const orientation = EXIF.getTag(this, 'Orientation');
                         const img = new Image();
                         img.src = URL.createObjectURL(file);
