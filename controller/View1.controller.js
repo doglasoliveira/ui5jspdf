@@ -1,12 +1,11 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "thirdparty/jsPDF",
-    "pdfmobile/Exif"
+    "thirdparty/jsPDF"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller, jsPDF, EXIF) {
+    function (Controller, jsPDF) {
         "use strict";
 
         return Controller.extend("pdfmobile.controller.View1", {
