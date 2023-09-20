@@ -14,75 +14,55 @@ sap.ui.define([
 
             },
 
-            onSelecFile: function (oEvent) {
-                if (oEvent.getSource().oFileUpload.files.length > 0) {
-                    const file = oEvent.getSource().oFileUpload.files[0];
-                    this.fixImageOrientation(file, (fixedBlob) => {
-                        const doc = new jsPDF();
-                        doc.addImage(fixedBlob, 'JPEG', 10, 10); // Exemplo de uso
-                        let sFileName = `${oEvent.getSource().oFileUpload.title}.pdf`;
-                        doc.save(sFileName);
-                    });
-                }
-            },
-            fixImageOrientation: (file, callback) => {
-                if (file.type.startsWith('image/')) {
-                    EXIF.getData(file, function () {
-                        const orientation = EXIF.getTag(this, 'Orientation');
-                        const img = new Image();
-                        img.src = URL.createObjectURL(file);
+            onSelecFile: function (event) {
+                const file = event.getParameters().files[0];
 
-                        img.onload = () => {
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            if ([5, 6, 7, 8].includes(orientation)) {
-                                canvas.width = img.height;
-                                canvas.height = img.width;
-                            } else {
-                                canvas.width = img.width;
-                                canvas.height = img.height;
-                            }
-                            switch (orientation) {
-                                case 2:
-                                    // Flip horizontal
-                                    ctx.transform(-1, 0, 0, 1, canvas.width, 0);
-                                    break;
-                                case 3:
-                                    // 180° rotation
-                                    ctx.transform(-1, 0, 0, -1, canvas.width, canvas.height);
-                                    break;
-                                case 4:
-                                    // Flip vertical
-                                    ctx.transform(1, 0, 0, -1, 0, canvas.height);
-                                    break;
-                                case 5:
-                                    // 90° rotation and flip vertical
-                                    ctx.transform(0, 1, 1, 0, 0, 0);
-                                    break;
-                                case 6:
-                                    // 90° rotation
-                                    ctx.transform(0, 1, -1, 0, canvas.height, 0);
-                                    break;
-                                case 7:
-                                    // 90° rotation and flip horizontal
-                                    ctx.transform(0, -1, -1, 0, canvas.height, canvas.width);
-                                    break;
-                                case 8:
-                                    // 270° rotation
-                                    ctx.transform(0, -1, 1, 0, 0, canvas.width);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            ctx.drawImage(img, 0, 0);
-                            canvas.toBlob((blob) => {
-                                callback(blob);
-                            }, file.type);
-                        };
-                    });
-                } else {
-                    callback(file);
+                // Verifique se o arquivo é uma imagem
+                if (file.type.startsWith('image/')) {
+                    const img = new Image();
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    img.onload = () => {
+                        let width = img.width;
+                        let height = img.height;
+
+                        // Detecte a orientação da imagem e aplique a correção, se necessário
+                        if (width > height) {
+                            // A imagem está em modo paisagem, então gire-a para o modo retrato
+                            canvas.width = height;
+                            canvas.height = width;
+                            ctx.rotate(Math.PI / 2); // Rotação de 90 graus (pi/2 radianos)
+                            ctx.drawImage(img, 0, -height, width, height);
+                        } else {
+                            // A imagem já está em modo retrato, não é necessário girar
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+                        }
+
+                        // Converta o canvas para um Blob
+                        canvas.toBlob((blob) => {
+                            // Crie um novo documento PDF usando jsPDF
+                            const doc = new jsPDF();
+                            const pdfWidth = doc.internal.pageSize.getWidth();
+                            const pdfHeight = doc.internal.pageSize.getHeight();
+
+                            // Adicione a imagem corrigida ao PDF
+                            doc.addImage(blob, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+
+                            // Salve ou exiba o PDF, por exemplo:
+                            //doc.save('documento.pdf'); // Para salvar o PDF
+                            // Ou
+                            window.open(doc.output('bloburl'), '_blank'); // Para exibir o PDF em uma nova janela do navegador
+
+                        }, file.type);
+                    };
+
+                    // Carregue a imagem
+                    img.src = URL.createObjectURL(file);
                 }
+
             }
         });
     });
