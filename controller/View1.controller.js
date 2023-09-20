@@ -19,7 +19,6 @@ sap.ui.define([
                     const file = oEvent.getSource().oFileUpload.files[0];
                     let oBlobFile = new Blob([file], { type: file.type });
 
-                    const oReader = new FileReader();
                     this.fixImageOrientation(file, (fixedBlob) => {
                         const doc = new jsPDF();
                         doc.addImage(fixedBlob, 'JPEG', 10, 10); // Exemplo de uso
@@ -30,23 +29,13 @@ sap.ui.define([
             },
             fixImageOrientation: (file, callback) => {
                 if (file.type.startsWith('image/')) {
-                    EXIF.getData(file, function () {
+                    const oExit = new EXIF();
+                    oExit.getData(file, function () {
                         const orientation = EXIF.getTag(this, 'Orientation');
                         const img = new Image();
                         img.src = URL.createObjectURL(file);
+                        const oReader = new FileReader();
 
-                    oReader.onload = function (e) {
-                        var imagem = new Image();
-                        imagem.src = e.target.result;
-                        imagem.onload = function () {
-                            let doc = new jsPDF.jsPDF({
-                                orientation: 'l', // Define a orientação da página como retrato
-                                unit: 'mm', // Define as unidades como milímetros
-                                format: 'a4', // Define o formato da página como A4
-                              });
-                            doc.addImage(e.target.result, 'JPEG', 0, 0, 297, 210, null, null, null);
-                            let sFileName = `${oEvent.getSource().oFileUpload.title}.pdf`;
-                            doc.save(sFileName);
                         img.onload = () => {
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d');
@@ -93,14 +82,24 @@ sap.ui.define([
                             canvas.toBlob((blob) => {
                                 callback(blob);
                             }, file.type);
-                        };
-                    };
-                    oReader.readAsDataURL(oBlobFile);
-                    });
+                            oReader.onload = function (e) {
+                                var imagem = new Image();
+                                imagem.src = e.target.result;
+                                imagem.onload = function () {
+                                    let doc = new jsPDF.jsPDF({
+                                        orientation: 'l', // Define a orientação da página como retrato
+                                        unit: 'mm', // Define as unidades como milímetros
+                                        format: 'a4', // Define o formato da página como A4
+                                    });
+                                    doc.addImage(e.target.result, 'JPEG', 0, 0, 297, 210, null, null, null);
+                                    let sFileName = `${oEvent.getSource().oFileUpload.title}.pdf`;
+                                    doc.save(sFileName);
+                                };
+                            });
                 } else {
                     callback(file);
-                }
+                };
+                oReader.readAsDataURL(oBlobFile);
             }
-
         });
     });
