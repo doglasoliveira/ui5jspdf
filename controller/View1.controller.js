@@ -42,19 +42,25 @@ sap.ui.define([
 
                         // Converta o canvas para um Blob
                         canvas.toBlob((blob) => {
-                            // Crie um novo documento PDF usando jsPDF
-                            const doc = new jsPDF.jsPDF();
-                            const pdfWidth = doc.internal.pageSize.getWidth();
-                            const pdfHeight = doc.internal.pageSize.getHeight();
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                                const dataURL = reader.result;
 
-                            // Adicione a imagem corrigida ao PDF
-                            doc.addImage(blob, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                                // Criar um novo documento PDF usando jsPDF
+                                const doc = new jsPDF.jsPDF();
+                                const pdfWidth = doc.internal.pageSize.getWidth();
+                                const pdfHeight = doc.internal.pageSize.getHeight();
 
-                            // Salve ou exiba o PDF, por exemplo:
-                            //doc.save('documento.pdf'); // Para salvar o PDF
-                            // Ou
-                            window.open(doc.output('bloburl'), '_blank'); // Para exibir o PDF em uma nova janela do navegador
+                                // Adicione a imagem corrigida ao PDF usando o Data URL
+                                doc.addImage(dataURL, 'JPEG', 0, 0, pdfWidth, pdfHeight);
 
+                                // Salvar ou exibir o PDF, por exemplo:
+                                //doc.save('documento.pdf'); // Para salvar o PDF
+                                // Ou
+                                window.open(doc.output('bloburl'), '_blank'); // Para exibir o PDF em uma nova janela do navegador
+                            };
+
+                            reader.readAsDataURL(blob);
                         }, file.type);
                     };
 
