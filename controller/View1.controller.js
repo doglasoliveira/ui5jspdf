@@ -25,7 +25,7 @@ sap.ui.define([
                         imagem.src = e.target.result;
                         imagem.onload = function () {
                             let doc = new jsPDF.jsPDF({
-                                orientation: 'l', // Define a orientação da página como retrato
+                                orientation: 'p', // Define a orientação da página como retrato
                                 unit: 'mm', // Define as unidades como milímetros
                                 format: 'a4', // Define o formato da página como A4
                               });
